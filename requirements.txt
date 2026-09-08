@@ -1,0 +1,6 @@
+torch==2.14.0+cu130
+transformers==5.16.1
+Pillow==12.3.0
+pandas==2.3.3
+scikit-learn==1.7.2
+gradio==6.26.0
