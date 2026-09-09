@@ -2,14 +2,14 @@ import os
 if __name__ == "__main__":
     os.environ.setdefault("HF_HOME", r"D:\huggingface_cache")
 
-from dataset import load_pairs, split_by_image, load_processor
+from src.dataset import load_pairs, split_by_image, load_processor
 from collections import defaultdict
 from nltk.tokenize import wordpunct_tokenize
 from nltk.translate.bleu_score import corpus_bleu
-from predict import generate_caption, load_model
+from src.predict import generate_caption, load_model
 import torch
 from tqdm.auto import tqdm
-
+from PIL import Image
 
 CHECKPOINT = "best_model.pt"
 CAPTIONS = "../Flickr8k/captions.txt"
@@ -39,14 +39,15 @@ all_predictions = []
 for image_path, captions in tqdm(
     references_by_image.items(),
     desc = "Generating test captions"
-):
-    prediction = generate_caption(
-        model, 
-        image_path,
-        image_processor,
-        tokenizer,
-        device
-    )
+):  
+    with Image.open(image_path) as image:
+        prediction = generate_caption(
+            model, 
+            image,
+            image_processor,
+            tokenizer,
+            device
+        )
 
     all_references.append(
         [
